@@ -17,11 +17,16 @@ defmodule CFXXL.CertUtils do
   """
   def serial_number!(cert) do
     cert
+    |> tbs()
+    |> tbs_certificate(:serialNumber)
+    |> to_string()
+  end
+
+  defp tbs(cert) do
+    cert
     |> :public_key.pem_decode()
     |> hd()
     |> :public_key.pem_entry_decode()
     |> certificate(:tbsCertificate)
-    |> tbs_certificate(:serialNumber)
-    |> to_string()
   end
 end
