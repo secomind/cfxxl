@@ -5,6 +5,8 @@ defmodule CFXXL do
 
   alias CFXXL.Client
 
+  @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
+
   def info(client, label, _opts \\ []) do
     body = %{label: label}
 
@@ -24,8 +26,10 @@ defmodule CFXXL do
     post(client, "revoke", body)
   end
 
-  def sign(client, csr, _opts \\ []) do
-    body = %{certificate_request: csr}
+  def sign(client, csr, opts \\ []) do
+    body = opts
+      |> Enum.filter(fn {k, _} -> k in @sign_opts end)
+      |> Enum.into(%{certificate_request: csr})
 
     post(client, "sign", body)
   end
