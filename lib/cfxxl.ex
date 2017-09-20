@@ -5,10 +5,9 @@ defmodule CFXXL do
 
   alias CFXXL.Client
 
-  def sign(client, csr, _options \\ []) do
-    body = %{certificate_request: csr}
-
-    post(client, "sign", body)
+  def post(%Client{endpoint: endpoint}, route, body) do
+    HTTPoison.post("#{endpoint}/#{route}", Poison.encode!(body))
+    |> process_response()
   end
 
   def revoke(client, serial, aki, reason) do
@@ -19,9 +18,10 @@ defmodule CFXXL do
     post(client, "revoke", body)
   end
 
-  def post(%Client{endpoint: endpoint}, route, body) do
-    HTTPoison.post("#{endpoint}/#{route}", Poison.encode!(body))
-    |> process_response()
+  def sign(client, csr, _options \\ []) do
+    body = %{certificate_request: csr}
+
+    post(client, "sign", body)
   end
 
   defp process_response({:error, _} = response), do: response
