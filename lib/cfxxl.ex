@@ -5,10 +5,13 @@ defmodule CFXXL do
 
   alias CFXXL.Client
 
+  @info_opts [:profile]
   @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
 
-  def info(client, label, _opts \\ []) do
-    body = %{label: label}
+  def info(client, label, opts \\ []) do
+    body = opts
+      |> Enum.filter(fn {k, _} -> k in @info_opts end)
+      |> Enum.into(%{label: label})
 
     post(client, "info", body)
   end
