@@ -3,6 +3,8 @@ defmodule CFXXL.CertUtils do
   A module containing utility functions to extract informations from PEM certificates
   """
 
+  @aki_oid {2, 5, 29, 35}
+
   require Record
 
   Record.defrecordp :certificate, :Certificate, Record.extract(:Certificate, from_lib: "public_key/include/public_key.hrl")
