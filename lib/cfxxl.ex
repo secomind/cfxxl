@@ -5,7 +5,7 @@ defmodule CFXXL do
 
   alias CFXXL.Client
 
-  def info(client, label, _options \\ []) do
+  def info(client, label, _opts \\ []) do
     body = %{label: label}
 
     post(client, "info", body)
@@ -24,7 +24,7 @@ defmodule CFXXL do
     post(client, "revoke", body)
   end
 
-  def sign(client, csr, _options \\ []) do
+  def sign(client, csr, _opts \\ []) do
     body = %{certificate_request: csr}
 
     post(client, "sign", body)
