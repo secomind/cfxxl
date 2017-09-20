@@ -8,6 +8,16 @@ defmodule CFXXL do
   @info_opts [:profile]
   @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
 
+  def crl(client, expiry \\ nil) do
+    target = if expiry do
+        "crl?#{expiry}"
+      else
+        "crl"
+      end
+
+    get(client, target)
+  end
+
   def get(%Client{endpoint: endpoint}, route) do
     HTTPoison.get("#{endpoint}/#{route}")
     |> process_response()
