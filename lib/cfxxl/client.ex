@@ -1,5 +1,5 @@
 defmodule CFXXL.Client do
-  @api_prefix "api/v1/cfssl/"
+  @api_prefix "api/v1/cfssl"
 
   defstruct endpoint: "http://localhost:8888/#{@api_prefix}"
 
