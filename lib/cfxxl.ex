@@ -5,6 +5,12 @@ defmodule CFXXL do
 
   alias CFXXL.Client
 
+  def info(client, label, _options \\ []) do
+    body = %{label: label}
+
+    post(client, "info", body)
+  end
+
   def post(%Client{endpoint: endpoint}, route, body) do
     HTTPoison.post("#{endpoint}/#{route}", Poison.encode!(body))
     |> process_response()
