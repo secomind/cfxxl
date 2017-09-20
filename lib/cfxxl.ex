@@ -8,6 +8,11 @@ defmodule CFXXL do
   @info_opts [:profile]
   @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
 
+  def get(%Client{endpoint: endpoint}, route) do
+    HTTPoison.get("#{endpoint}/#{route}")
+    |> process_response()
+  end
+
   def info(client, label, opts \\ []) do
     body = opts
       |> Enum.filter(fn {k, _} -> k in @info_opts end)
