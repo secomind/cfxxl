@@ -11,6 +11,14 @@ defmodule CFXXL do
     post(client, "sign", body)
   end
 
+  def revoke(client, serial, aki, reason) do
+    body = %{serial: serial,
+             authority_key_id: normalize_aki(aki),
+             reason: reason}
+
+    post(client, "revoke", body)
+  end
+
   def post(%Client{endpoint: endpoint}, route, body) do
     HTTPoison.post("#{endpoint}/#{route}", Poison.encode!(body))
     |> process_response()
@@ -28,4 +36,10 @@ defmodule CFXXL do
   end
 
   defp extract_errors(%{"errors" => errors}), do: {errors}
+
+  defp normalize_aki(aki) do
+    aki
+    |> String.downcase()
+    |> String.replace(":", "")
+  end
 end
