@@ -59,6 +59,10 @@ defmodule CFXXL do
     post(client, "revoke", body)
   end
 
+  def scaninfo(client) do
+    get(client, "scaninfo")
+  end
+
   def sign(client, csr, opts \\ []) do
     body = opts
       |> Enum.filter(fn {k, _} -> k in @sign_opts end)
