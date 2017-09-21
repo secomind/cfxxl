@@ -115,10 +115,7 @@ defmodule CFXXL do
   end
 
   def sign(client, csr, opts \\ []) do
-    body =
-      opts
-      |> filter_opts(@sign_opts)
-      |> Enum.into(%{certificate_request: csr})
+    body = sign_request(csr, opts)
 
     post(client, "sign", body)
   end
@@ -151,5 +148,11 @@ defmodule CFXXL do
     opts
     |> filter_opts(@newkey_opts)
     |> Enum.into(%{hosts: hosts, names: names})
+  end
+
+  defp sign_request(csr, opts) do
+    opts
+    |> filter_opts(@sign_opts)
+    |> Enum.into(%{certificate_request: csr})
   end
 end
