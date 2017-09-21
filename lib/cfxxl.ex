@@ -24,13 +24,11 @@ defmodule CFXXL do
   end
 
   def crl(client, expiry \\ nil) do
-    target = if expiry do
-        "crl?#{expiry}"
-      else
-        "crl"
-      end
-
-    get(client, target)
+    if expiry do
+      get(client, "crl", %{expiry: expiry})
+    else
+      get(client, "crl")
+    end
   end
 
   def get(%Client{endpoint: endpoint}, route, params \\ %{}) do
