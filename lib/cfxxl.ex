@@ -70,8 +70,8 @@ defmodule CFXXL do
     end
   end
 
-  def get(%Client{endpoint: endpoint}, route, params \\ %{}) do
-    HTTPoison.get("#{endpoint}/#{route}", [], params: params)
+  def get(%Client{endpoint: endpoint, options: options}, route, params \\ %{}) do
+    HTTPoison.get("#{endpoint}/#{route}", [], [{:params, params} | options])
     |> process_response()
   end
 
@@ -108,8 +108,8 @@ defmodule CFXXL do
     post(client, "newkey", body)
   end
 
-  def post(%Client{endpoint: endpoint}, route, body) do
-    HTTPoison.post("#{endpoint}/#{route}", Poison.encode!(body))
+  def post(%Client{endpoint: endpoint, options: options}, route, body) do
+    HTTPoison.post("#{endpoint}/#{route}", Poison.encode!(body), [], options)
     |> process_response()
   end
 
