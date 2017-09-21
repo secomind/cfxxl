@@ -39,7 +39,8 @@ defmodule CFXXL do
   end
 
   def info(client, label, opts \\ []) do
-    body = opts
+    body =
+      opts
       |> Enum.filter(fn {k, _} -> k in @info_opts end)
       |> Enum.into(%{label: label})
 
@@ -47,7 +48,8 @@ defmodule CFXXL do
   end
 
   def init_ca(client, hosts, names, opts \\ []) do
-    body = opts
+    body =
+      opts
       |> Enum.filter(fn {k, _} -> k in @init_ca_opts end)
       |> Enum.into(%{hosts: hosts, names: names})
 
@@ -55,7 +57,8 @@ defmodule CFXXL do
   end
 
   def newkey(client, hosts, names, opts \\ []) do
-    body = opts
+    body =
+      opts
       |> Enum.filter(fn {k, _} -> k in @newkey_opts end)
       |> Enum.into(%{hosts: hosts, names: names})
 
@@ -80,7 +83,8 @@ defmodule CFXXL do
   end
 
   def sign(client, csr, opts \\ []) do
-    body = opts
+    body =
+      opts
       |> Enum.filter(fn {k, _} -> k in @sign_opts end)
       |> Enum.into(%{certificate_request: csr})
 
