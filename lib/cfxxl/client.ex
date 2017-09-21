@@ -1,5 +1,6 @@
 defmodule CFXXL.Client do
   @api_prefix "api/v1/cfssl"
+  @accepted_opts [:timeout, :recv_timeout, :proxy, :proxy_auth, :ssl]
 
   defstruct endpoint: "http://localhost:8888/#{@api_prefix}", options: []
 
@@ -11,7 +12,12 @@ defmodule CFXXL.Client do
       else
         "#{base_url}/#{@api_prefix}"
       end
-    %__MODULE__{endpoint: endpoint, options: options}
+
+    filtered_opts =
+      options
+      |> Enum.filter(fn {k, _} -> k in @accepted_opts end)
+
+    %__MODULE__{endpoint: endpoint, options: filtered_opts}
   end
 
 end
