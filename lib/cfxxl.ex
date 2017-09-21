@@ -5,11 +5,36 @@ defmodule CFXXL do
 
   alias CFXXL.Client
 
+  @bundle_cert_opts [:domain, :private_key, :flavor, :ip]
+  @bundle_domain_opts [:ip]
   @info_opts [:profile]
   @init_ca_opts [:CN, :key, :ca]
   @newcert_opts [:label, :profile, :bundle]
   @newkey_opts [:CN, :key]
   @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
+
+  def bundle(client, opts) do
+    cond do
+      Keyword.has_key?(opts, :certificate) ->
+        body =
+          opts
+          |> filter_opts(@bundle_cert_opts)
+          |> Enum.into(%{certificate: opts[:certificate]})
+
+        post(client, "bundle", body)
+
+      Keyword.has_key?(opts, :domain) ->
+        body =
+          opts
+          |> filter_opts(@bundle_domain_opts)
+          |> Enum.into(%{domain: opts[:domain]})
+
+        post(client, "bundle", body)
+
+      true ->
+        {:error, :no_certificate_or_domain}
+    end
+  end
 
   def certinfo(client, opts \\ []) do
     cond do
