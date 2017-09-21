@@ -12,6 +12,7 @@ defmodule CFXXL do
   @init_ca_opts [:CN, :key, :ca]
   @newcert_opts [:label, :profile, :bundle]
   @newkey_opts [:CN, :key]
+  @scan_opts [:ip, :timeout, :family, :scanner]
   @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
 
   def authsign(client, token, csr, opts \\ []) do
@@ -118,6 +119,15 @@ defmodule CFXXL do
              reason: reason}
 
     post(client, "revoke", body)
+  end
+
+  def scan(client, host, opts \\ []) do
+    params =
+      opts
+      |> filter_opts(@scan_opts)
+      |> Enum.into(%{host: host})
+
+    get(client, "scan", params)
   end
 
   def scaninfo(client) do
