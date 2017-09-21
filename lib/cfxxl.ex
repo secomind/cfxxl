@@ -114,4 +114,10 @@ defmodule CFXXL do
     opts
     |> Enum.filter(fn {k, _} -> k in accepted_opts end)
   end
+
+  defp newkey_request(hosts, names, opts) do
+    opts
+    |> filter_opts(@newkey_opts)
+    |> Enum.into(%{hosts: hosts, names: names})
+  end
 end
