@@ -33,8 +33,8 @@ defmodule CFXXL do
     get(client, target)
   end
 
-  def get(%Client{endpoint: endpoint}, route) do
-    HTTPoison.get("#{endpoint}/#{route}")
+  def get(%Client{endpoint: endpoint}, route, params \\ %{}) do
+    HTTPoison.get("#{endpoint}/#{route}", [], params: params)
     |> process_response()
   end
 
