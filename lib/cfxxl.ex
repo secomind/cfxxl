@@ -36,7 +36,7 @@ defmodule CFXXL do
     end
   end
 
-  def certinfo(client, opts \\ []) do
+  def certinfo(client, opts) do
     cond do
       Keyword.has_key?(opts, :certificate) ->
         cert = opts[:certificate]
