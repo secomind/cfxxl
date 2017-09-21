@@ -41,7 +41,7 @@ defmodule CFXXL do
   def info(client, label, opts \\ []) do
     body =
       opts
-      |> Enum.filter(fn {k, _} -> k in @info_opts end)
+      |> filter_opts(@info_opts)
       |> Enum.into(%{label: label})
 
     post(client, "info", body)
@@ -50,7 +50,7 @@ defmodule CFXXL do
   def init_ca(client, hosts, names, opts \\ []) do
     body =
       opts
-      |> Enum.filter(fn {k, _} -> k in @init_ca_opts end)
+      |> filter_opts(@init_ca_opts)
       |> Enum.into(%{hosts: hosts, names: names})
 
     post(client, "init_ca", body)
@@ -59,7 +59,7 @@ defmodule CFXXL do
   def newkey(client, hosts, names, opts \\ []) do
     body =
       opts
-      |> Enum.filter(fn {k, _} -> k in @newkey_opts end)
+      |> filter_opts(@newkey_opts)
       |> Enum.into(%{hosts: hosts, names: names})
 
     post(client, "newkey", body)
@@ -85,7 +85,7 @@ defmodule CFXXL do
   def sign(client, csr, opts \\ []) do
     body =
       opts
-      |> Enum.filter(fn {k, _} -> k in @sign_opts end)
+      |> filter_opts(@sign_opts)
       |> Enum.into(%{certificate_request: csr})
 
     post(client, "sign", body)
@@ -108,5 +108,10 @@ defmodule CFXXL do
     aki
     |> String.downcase()
     |> String.replace(":", "")
+  end
+
+  defp filter_opts(opts, accepted_opts) do
+    opts
+    |> Enum.filter(fn {k, _} -> k in accepted_opts end)
   end
 end
