@@ -5,6 +5,7 @@ defmodule CFXXL do
 
   alias CFXXL.Client
 
+  @authsign_opts [:timestamp, :remote_address, :bundle]
   @bundle_cert_opts [:domain, :private_key, :flavor, :ip]
   @bundle_domain_opts [:ip]
   @info_opts [:profile]
@@ -12,6 +13,15 @@ defmodule CFXXL do
   @newcert_opts [:label, :profile, :bundle]
   @newkey_opts [:CN, :key]
   @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
+
+  def authsign(client, token, csr, opts \\ []) do
+    body =
+      opts
+      |> filter_opts(@authsign_opts)
+      |> Enum.into(%{token: token, request: sign_request(csr, opts)})
+
+    post(client, "authsign", body)
+  end
 
   def bundle(client, opts) do
     cond do
