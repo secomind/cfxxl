@@ -7,7 +7,11 @@ defmodule CFXXL.Mixfile do
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps()]
+     deps: deps(),
+
+     #Docs
+     name: "CFXXL",
+     source_url: "https://github.com/Ispirata/cfxxl"]
   end
 
   # Configuration for the OTP application
