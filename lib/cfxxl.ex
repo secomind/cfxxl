@@ -8,6 +8,21 @@ defmodule CFXXL do
   @info_opts [:profile]
   @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
 
+  def certinfo(client, opts \\ []) do
+    cond do
+      Keyword.has_key?(opts, :certificate) ->
+        cert = opts[:certificate]
+        post(client, "certinfo", %{certificate: cert})
+
+      Keyword.has_key?(opts, :domain) ->
+        domain = opts[:domain]
+        post(client, "certinfo", %{domain: domain})
+
+      true ->
+        {:error, :no_certificate_or_domain}
+    end
+  end
+
   def crl(client, expiry \\ nil) do
     target = if expiry do
         "crl?#{expiry}"
