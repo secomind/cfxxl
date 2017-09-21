@@ -7,6 +7,7 @@ defmodule CFXXL do
 
   @info_opts [:profile]
   @init_ca_opts [:CN, :key, :ca]
+  @newkey_opts [:CN, :key]
   @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
 
   def certinfo(client, opts \\ []) do
@@ -51,6 +52,14 @@ defmodule CFXXL do
       |> Enum.into(%{hosts: hosts, names: names})
 
     post(client, "init_ca", body)
+  end
+
+  def newkey(client, hosts, names, opts \\ []) do
+    body = opts
+      |> Enum.filter(fn {k, _} -> k in @newkey_opts end)
+      |> Enum.into(%{hosts: hosts, names: names})
+
+    post(client, "newkey", body)
   end
 
   def post(%Client{endpoint: endpoint}, route, body) do
