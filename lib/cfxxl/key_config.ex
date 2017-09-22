@@ -13,6 +13,30 @@
 # included in all copies or substantial portions of the Software.
 
 defmodule CFXXL.KeyConfig do
+  @moduledoc """
+  Module defining a struct to configure the crypto for a new key/CSR
+  pair
+  """
+
   @derive [Poison.Encoder]
+
+  @doc """
+  A struct containing an algorithm/size pair to configure key crypto.
+
+  The fields are:
+    * `algo`
+    * `size`
+
+  The CFSSL API accepts the following values for `algo`:
+    * `:ecdsa`
+    * `:rsa`
+
+  When `algo` is `:rsa`, `size` can be any value between 2048 and 8192.
+
+  When `algo` is `:ecdsa`, `size` can be one of:
+    * 256
+    * 384
+    * 521
+  """
   defstruct algo: :ecdsa, size: 256
 end
