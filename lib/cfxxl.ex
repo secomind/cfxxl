@@ -98,26 +98,26 @@ defmodule CFXXL do
     post(client, "info", body)
   end
 
-  def init_ca(client, hosts, names, opts \\ []) do
+  def init_ca(client, hosts, dname, opts \\ []) do
     body =
       opts
       |> filter_opts(@init_ca_opts)
-      |> Enum.into(%{hosts: hosts, names: names})
+      |> Enum.into(%{hosts: hosts, names: dname})
 
     post(client, "init_ca", body)
   end
 
-  def newcert(client, hosts, names, opts \\ []) do
+  def newcert(client, hosts, dname, opts \\ []) do
     body =
       opts
       |> filter_opts(@newcert_opts)
-      |> Enum.into(%{request: newkey_request(hosts, names, opts)})
+      |> Enum.into(%{request: newkey_request(hosts, dname, opts)})
 
     post(client, "newcert", body)
   end
 
-  def newkey(client, hosts, names, opts \\ []) do
-    body = newkey_request(hosts, names, opts)
+  def newkey(client, hosts, dname, opts \\ []) do
+    body = newkey_request(hosts, dname, opts)
 
     post(client, "newkey", body)
   end
@@ -183,10 +183,10 @@ defmodule CFXXL do
     |> Enum.filter(fn {k, _} -> k in accepted_opts end)
   end
 
-  defp newkey_request(hosts, names, opts) do
+  defp newkey_request(hosts, dname, opts) do
     opts
     |> filter_opts(@newkey_opts)
-    |> Enum.into(%{hosts: hosts, names: names})
+    |> Enum.into(%{hosts: hosts, names: dname})
   end
 
   defp sign_request(csr, opts) do
