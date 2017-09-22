@@ -12,7 +12,11 @@ defmodule CFXXL.Mixfile do
      #Docs
      name: "CFXXL",
      source_url: "https://github.com/Ispirata/cfxxl",
-     docs: [main: "CFXXL"]
+     docs: [main: "CFXXL"],
+
+     #excoveralls
+     test_coverage: [tool: ExCoveralls],
+     preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]
     ]
   end
 
@@ -37,7 +41,9 @@ defmodule CFXXL.Mixfile do
     [{:httpoison, "~> 0.13"},
      {:poison, "~> 3.1"},
 
-     {:ex_doc, "~> 0.16", only: :dev, runtime: false}
+     {:ex_doc, "~> 0.16", only: :dev, runtime: false},
+
+     {:excoveralls, "~> 0.7", only: :test}
     ]
   end
 end
