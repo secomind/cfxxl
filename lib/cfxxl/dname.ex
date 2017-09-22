@@ -13,6 +13,20 @@
 # included in all copies or substantial portions of the Software.
 
 defmodule CFXXL.DName do
+  @moduledoc """
+  Module defining a struct for certificates DN
+  """
+
+  @doc """
+  A struct representing a Distinguished Name.
+
+  It supports the current fields:
+    * `C`: country
+    * `L`: locality
+    * `O`: organization
+    * `OU`: organizational unit
+    * `ST`: state or province name
+  """
   defstruct [:C, :L, :O, :OU, :ST]
 
   defimpl Poison.Encoder, for: CFXXL.DName do
