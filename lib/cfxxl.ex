@@ -160,12 +160,17 @@ defmodule CFXXL do
   defp extract_result(body) do
     case Poison.decode(body) do
       {:error, _} -> {:error, :invalid_response}
-      {:ok, %{"success" => false} = decoded} -> {:error, extract_errors(decoded)}
+      {:ok, %{"success" => false} = decoded} -> {:error, extract_error_message(decoded)}
       {:ok, %{"success" => true, "result" => result}} -> {:ok, result}
     end
   end
 
-  defp extract_errors(%{"errors" => errors}), do: {errors}
+  defp extract_error_message(%{"errors" => errors}) do
+    case errors do
+      [%{"message" => msg} | _] -> msg
+      [] -> :generic_error
+    end
+  end
 
   defp normalize_aki(aki) do
     aki
