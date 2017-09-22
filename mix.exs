@@ -11,7 +11,9 @@ defmodule CFXXL.Mixfile do
 
      #Docs
      name: "CFXXL",
-     source_url: "https://github.com/Ispirata/cfxxl"]
+     source_url: "https://github.com/Ispirata/cfxxl",
+     docs: [main: "CFXXL"]
+    ]
   end
 
   # Configuration for the OTP application
