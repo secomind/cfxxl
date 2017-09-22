@@ -27,4 +27,15 @@ defmodule CFXXL.CAConfig do
     * `expiry`: a string representing the expiry date of the CA
   """
   defstruct [:pathlength, :pathlenzero, :expiry]
+
+  defimpl Poison.Encoder, for: CFXXL.CAConfig do
+    def encode(ca_config, options) do
+      # Encode only non-nil values
+      ca_config
+      |> Map.from_struct()
+      |> Enum.filter(fn {_, v} -> v end)
+      |> Enum.into(%{})
+      |> Poison.Encoder.encode(options)
+    end
+  end
 end
