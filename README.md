@@ -8,7 +8,7 @@ Add `cfxxl` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:cfxxl, github: "Ispirata/cfxxl"}]
+  [{:cfxxl, "~> 0.1"}]
 end
 ```
 
