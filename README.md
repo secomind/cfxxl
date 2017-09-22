@@ -1,19 +1,30 @@
 # CFXXL
 
-**TODO: Add description**
+CFSSL API client for Elixir
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `cfxxl` to your list of dependencies in `mix.exs`:
+Add `cfxxl` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:cfxxl, "~> 0.1.0"}]
+  [{:cfxxl, github: "Ispirata/cfxxl"}]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/cfxxl](https://hexdocs.pm/cfxxl).
+## Usage examples
 
+Create a client pointing to the CFSSL API
+
+```elixir
+client = CFXXL.Client.new("http://localhost:8888")
+```
+
+Use the client to call the functions in the `CFXXL` module
+
+```elixir
+hosts = ["www.example.com", "example.com"]
+dname = %CFXXL.DName{O: "Example Ltd"}
+key = %CFXXL.KeyConfig{algo: :rsa, size: 4096}
+new_key = client |> CFXXL.newkey(hosts, dname, key: key)
+```
