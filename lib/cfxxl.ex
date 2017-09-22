@@ -132,7 +132,10 @@ defmodule CFXXL do
              authority_key_id: normalize_aki(aki),
              reason: reason}
 
-    post(client, "revoke", body)
+    case post(client, "revoke", body) do
+      {:ok, _} -> :ok
+      error -> error
+    end
   end
 
   def scan(client, host, opts \\ []) do
