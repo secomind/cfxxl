@@ -13,6 +13,18 @@
 # included in all copies or substantial portions of the Software.
 
 defmodule CFXXL.Subject do
+  @moduledoc """
+  Module defining a struct to be passed to override the certificate
+  subject in a CSR
+  """
+
+  @doc """
+  A struct representing a certificate Subject.
+
+  It supports the current fields:
+    * `CN`: the Common Name
+    * `dname`: a `CFXXL.DName` struct representing the DN
+  """
   defstruct [:CN, :dname]
 
   defimpl Poison.Encoder, for: CFXXL.Subject do
