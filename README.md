@@ -12,6 +12,10 @@ def deps do
 end
 ```
 
+## Documentation
+
+The documentation is available on [HexDocs](https://hexdocs.pm/cfxxl/0.1.0/CFXXL.html)
+
 ## Usage examples
 
 Create a client pointing to the CFSSL API
