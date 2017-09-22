@@ -13,5 +13,6 @@
 # included in all copies or substantial portions of the Software.
 
 defmodule CFXXL.KeyConfig do
+  @derive [Poison.Encoder]
   defstruct algo: :ecdsa, size: 256
 end
