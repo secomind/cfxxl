@@ -8,6 +8,7 @@ defmodule CFXXL.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps(),
+     package: package(),
 
      #Docs
      name: "CFXXL",
@@ -45,5 +46,11 @@ defmodule CFXXL.Mixfile do
 
      {:excoveralls, "~> 0.7", only: :test}
     ]
+  end
+
+  defp package do
+    [maintainers: ["Riccardo Binetti", "Davide Bettio"],
+     licenses: ["MIT"],
+     links: %{"GitHub" => "https://github.com/Ispirata/cfxxl"}]
   end
 end
