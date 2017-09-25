@@ -14,8 +14,5 @@ matrix:
       otp_release: 20.0
     - elixir: 1.5
       otp_release: 20.0
-#notifications:
-#  recipients:
-#after_script:
-#  - mix deps.get --only docs
-#  - MIX_ENV=docs mix inch.report
+after_script:
+  - mix coveralls.travis
