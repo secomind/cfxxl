@@ -1,0 +1,21 @@
+language: elixir
+sudo: required
+services:
+  - docker
+before_install:
+  - docker pull laslabs/alpine-cfssl
+  - docker run -d -p 127.0.0.1:8888:8080 laslabs/alpine-cfssl
+  - docker ps -a
+matrix:
+  include:
+    - elixir: 1.4
+      otp_release: 19.3
+    - elixir: 1.4
+      otp_release: 20.0
+    - elixir: 1.5
+      otp_release: 20.0
+#notifications:
+#  recipients:
+#after_script:
+#  - mix deps.get --only docs
+#  - MIX_ENV=docs mix inch.report
