@@ -1,6 +1,7 @@
-# CFXXL
+CFXXL [![hex.pm version](https://img.shields.io/hexpm/v/cfxxl.svg)](https://hex.pm/packages/cfxxl) [![Build Status](https://travis-ci.org/ispirata/cfxxl.svg?branch=master)](https://travis-ci.org/ispirata/cfxxl) [![Coverage Status](https://coveralls.io/repos/github/ispirata/cfxxl/badge.svg)](https://coveralls.io/github/ispirata/cfxxl)
+============
 
-CFSSL API client for Elixir
+An Elixir client for [CFSSL](https://github.com/cloudflare/cfssl).
 
 ## Installation
 
