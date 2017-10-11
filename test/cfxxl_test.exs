@@ -4,6 +4,8 @@ defmodule CFXXLTest do
 
   require Record
 
+  alias CFXXL.CertUtils
+
   @fixture_dname %CFXXL.DName{O: "Example Ltd"}
   @fixture_hosts ["example.com", "www.example.com"]
 
@@ -88,8 +90,8 @@ defmodule CFXXLTest do
     assert Map.has_key?(genres, "sums")
     assert {:ok, cert} = Map.fetch(genres, "certificate")
 
-    serial = CFXXL.CertUtils.serial_number!(cert)
-    aki = CFXXL.CertUtils.authority_key_identifier!(cert)
+    serial = CertUtils.serial_number!(cert)
+    aki = CertUtils.authority_key_identifier!(cert)
 
     assert :ok = revoke(client, serial, aki, "superseded")
   end
@@ -127,17 +129,17 @@ defmodule CFXXLTest do
     assert Map.has_key?(res, "pem")
     assert Map.has_key?(res, "subject_key_id")
 
-    assert CFXXL.CertUtils.serial_number!(@fixture_crt) == Map.get(res, "serial_number")
+    assert CertUtils.serial_number!(@fixture_crt) == Map.get(res, "serial_number")
 
     %{"common_name" => cn} = Map.get(res, "subject")
 
-    assert CFXXL.CertUtils.common_name!(@fixture_crt) == cn
+    assert CertUtils.common_name!(@fixture_crt) == cn
 
     aki =
       Map.get(res, "authority_key_id")
       |> String.downcase()
       |> String.replace(":", "")
 
-    assert aki == CFXXL.CertUtils.authority_key_identifier!(@fixture_crt)
+    assert aki == CertUtils.authority_key_identifier!(@fixture_crt)
   end
 end
