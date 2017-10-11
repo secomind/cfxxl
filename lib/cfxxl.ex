@@ -98,7 +98,7 @@ defmodule CFXXL do
     * `{:ok, result}` with the contents of the `result` key of the API
     * `{:error, reason}` if it fails
   """
-  def bundle(client, opts) do
+  def bundle(client, opts) when is_list(opts) do
     cond do
       Keyword.has_key?(opts, :certificate) ->
         body =
@@ -120,6 +120,7 @@ defmodule CFXXL do
         {:error, :no_certificate_or_domain}
     end
   end
+  def bundle(_client, _opts), do: {:error, :no_certificate_or_domain}
 
   @doc """
   Request information about a certificate
@@ -138,7 +139,7 @@ defmodule CFXXL do
     * `{:ok, result}` with the contents of the `result` key of the API
     * `{:error, reason}` if it fails
   """
-  def certinfo(client, opts) do
+  def certinfo(client, opts) when is_list(opts) do
     cond do
       Keyword.has_key?(opts, :certificate) ->
         cert = opts[:certificate]
@@ -152,6 +153,7 @@ defmodule CFXXL do
         {:error, :no_certificate_or_domain}
     end
   end
+  def certinfo(_client, _opts), do: {:error, :no_certificate_or_domain}
 
   @doc """
   Generate a CRL from the database
