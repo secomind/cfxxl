@@ -18,6 +18,7 @@ defmodule CFXXL.CertUtils do
   """
 
   @aki_oid {2, 5, 29, 35}
+  @common_name_oid {2, 5, 4, 3}
 
   require Record
 
@@ -25,6 +26,7 @@ defmodule CFXXL.CertUtils do
   Record.defrecordp :tbs_certificate, :TBSCertificate, Record.extract(:TBSCertificate, from_lib: "public_key/include/public_key.hrl")
   Record.defrecordp :extension, :Extension, Record.extract(:Extension, from_lib: "public_key/include/public_key.hrl")
   Record.defrecordp :authority_key_identifier, :AuthorityKeyIdentifier, Record.extract(:AuthorityKeyIdentifier, from_lib: "public_key/include/public_key.hrl")
+  Record.defrecordp :attribute_type_and_value, :AttributeTypeAndValue, Record.extract(:AttributeTypeAndValue, from_lib: "public_key/include/public_key.hrl")
 
   @doc """
   Extracts the serial number of a certificate.
@@ -62,6 +64,37 @@ defmodule CFXXL.CertUtils do
         :public_key.der_decode(:AuthorityKeyIdentifier, aki_extension[:extnValue])
         |> authority_key_identifier(:keyIdentifier)
         |> Base.encode16(case: :lower)
+    end
+  end
+
+  @doc """
+  Extracts the Common Name of a certificate.
+
+  `cert` must be a string containing a PEM encoded certificate.
+
+  Returns the Common Name as string or nil if it doesn't find one, raises if there's an error.
+  """
+  def common_name!(cert) do
+    {:rdnSequence, subject_attributes} =
+      cert
+      |> tbs()
+      |> tbs_certificate(:subject)
+
+    common_name =
+      subject_attributes
+      |> Enum.map(fn([list_wrapped_attr]) -> attribute_type_and_value(list_wrapped_attr) end)
+      |> Enum.find(fn(attr) -> attr[:type] == @common_name_oid end)
+
+    if common_name do
+      case :public_key.der_decode(:X520CommonName, common_name[:value]) do
+        {:printableString, cn} ->
+          to_string(cn)
+
+        {:utf8String, cn} ->
+          to_string(cn)
+      end
+    else
+      nil
     end
   end
 
