@@ -422,6 +422,7 @@ defmodule CFXXL do
   defp process_response({:error, _} = response), do: response
   defp process_response({:ok, %HTTPoison.Response{body: body}}), do: extract_result(body)
 
+  defp extract_result(""), do: {:error, :empty_response}
   defp extract_result(body) do
     case Poison.decode(body) do
       {:error, _} -> {:error, :invalid_response}
