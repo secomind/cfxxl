@@ -19,6 +19,7 @@ defmodule CFXXL.CertUtils do
 
   @aki_oid {2, 5, 29, 35}
   @common_name_oid {2, 5, 4, 3}
+  @z_char 90
 
   require Record
 
@@ -27,6 +28,7 @@ defmodule CFXXL.CertUtils do
   Record.defrecordp :extension, :Extension, Record.extract(:Extension, from_lib: "public_key/include/public_key.hrl")
   Record.defrecordp :authority_key_identifier, :AuthorityKeyIdentifier, Record.extract(:AuthorityKeyIdentifier, from_lib: "public_key/include/public_key.hrl")
   Record.defrecordp :attribute_type_and_value, :AttributeTypeAndValue, Record.extract(:AttributeTypeAndValue, from_lib: "public_key/include/public_key.hrl")
+  Record.defrecordp :validity, :Validity, Record.extract(:Validity, from_lib: "public_key/include/public_key.hrl")
 
   @doc """
   Extracts the serial number of a certificate.
@@ -96,6 +98,70 @@ defmodule CFXXL.CertUtils do
     else
       nil
     end
+  end
+
+  @doc """
+  Extracts the not_after field (expiration) of a certificate.
+
+  `cert` must be a string containing a PEM encoded certificate.
+
+  Returns not_after as `DateTime` or raises if there's an error.
+  """
+  def not_after!(cert) do
+    cert
+    |> tbs()
+    |> tbs_certificate(:validity)
+    |> validity(:notAfter)
+    |> cert_time_tuple_to_datetime()
+  end
+
+  @doc """
+  Extracts the not_before field of a certificate.
+
+  `cert` must be a string containing a PEM encoded certificate.
+
+  Returns not_before as `DateTime` or raises if there's an error.
+  """
+  def not_before!(cert) do
+    cert
+    |> tbs()
+    |> tbs_certificate(:validity)
+    |> validity(:notBefore)
+    |> cert_time_tuple_to_datetime()
+  end
+
+  defp cert_time_tuple_to_datetime({:utcTime, [y0, y1 | _rest] = time_charlist}) do
+    short_year = parse_charlist_int([y0, y1])
+
+    prefix =
+      if short_year >= 50 do
+        '19'
+      else
+        '20'
+      end
+
+    cert_time_tuple_to_datetime({:generalTime, prefix ++ time_charlist})
+  end
+  defp cert_time_tuple_to_datetime({_, [y0, y1, y2, y3, m0, m1, d0, d1, h0, h1, mn0, mn1, s0, s1, @z_char]}) do
+    year = parse_charlist_int([y0, y1, y2, y3])
+    month = parse_charlist_int([m0, m1])
+    day = parse_charlist_int([d0, d1])
+    hour = parse_charlist_int([h0, h1])
+    minute = parse_charlist_int([mn0, mn1])
+    second = parse_charlist_int([s0, s1])
+
+    {:ok, naive} = NaiveDateTime.new(year, month, day, hour, minute, second)
+
+    DateTime.from_naive!(naive, "Etc/UTC")
+  end
+
+  defp parse_charlist_int(charlist) do
+    {parsed, ""} =
+      charlist
+      |> to_string()
+      |> Integer.parse()
+
+    parsed
   end
 
   defp tbs(cert) do
