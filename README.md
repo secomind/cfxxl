@@ -9,7 +9,7 @@ Add `cfxxl` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:cfxxl, "~> 0.2.0"}]
+  [{:cfxxl, "~> 0.3.0"}]
 end
 ```
 
