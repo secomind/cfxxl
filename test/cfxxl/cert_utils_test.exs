@@ -31,20 +31,28 @@ defmodule CFXXL.CertUtilsTest do
   @test_cn "test-common-name"
   @test_aki "c1f2bfe1f22066576958ecf48514a91cdb4bcdf9"
   @test_serial "18152816444178967812"
-  @test_not_after DateTime.from_naive!(%NaiveDateTime{year: 2018,
-                                                      month: 10,
-                                                      day: 11,
-                                                      hour: 15,
-                                                      minute: 54,
-                                                      second: 08},
-                                       "Etc/UTC")
-  @test_not_before DateTime.from_naive!(%NaiveDateTime{year: 2017,
-                                                       month: 10,
-                                                       day: 11,
-                                                       hour: 15,
-                                                       minute: 54,
-                                                       second: 08},
-                                        "Etc/UTC")
+  @test_not_after DateTime.from_naive!(
+                    %NaiveDateTime{
+                      year: 2018,
+                      month: 10,
+                      day: 11,
+                      hour: 15,
+                      minute: 54,
+                      second: 08
+                    },
+                    "Etc/UTC"
+                  )
+  @test_not_before DateTime.from_naive!(
+                     %NaiveDateTime{
+                       year: 2017,
+                       month: 10,
+                       day: 11,
+                       hour: 15,
+                       minute: 54,
+                       second: 08
+                     },
+                     "Etc/UTC"
+                   )
 
   test "common name extraction" do
     assert CertUtils.common_name!(@test_crt) == @test_cn

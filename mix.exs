@@ -2,23 +2,29 @@ defmodule CFXXL.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :cfxxl,
-     description: "CFSSL API client for Elixir",
-     version: "0.3.0",
-     elixir: "~> 1.4",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps(),
-     package: package(),
+    [
+      app: :cfxxl,
+      description: "CFSSL API client for Elixir",
+      version: "0.3.0",
+      elixir: "~> 1.4",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      deps: deps(),
+      package: package(),
 
-     #Docs
-     name: "CFXXL",
-     source_url: "https://github.com/Ispirata/cfxxl",
-     docs: [main: "CFXXL"],
+      # Docs
+      name: "CFXXL",
+      source_url: "https://github.com/Ispirata/cfxxl",
+      docs: [main: "CFXXL"],
 
-     #excoveralls
-     test_coverage: [tool: ExCoveralls],
-     preferred_cli_env: ["coveralls": :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]
+      # excoveralls
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -40,18 +46,19 @@ defmodule CFXXL.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:httpoison, "~> 0.13"},
-     {:poison, "~> 3.1"},
-
-     {:ex_doc, "~> 0.16", only: :dev, runtime: false},
-
-     {:excoveralls, "~> 0.7", only: :test}
+    [
+      {:httpoison, "~> 0.13"},
+      {:poison, "~> 3.1"},
+      {:ex_doc, "~> 0.16", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.7", only: :test}
     ]
   end
 
   defp package do
-    [maintainers: ["Riccardo Binetti", "Davide Bettio"],
-     licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/Ispirata/cfxxl"}]
+    [
+      maintainers: ["Riccardo Binetti", "Davide Bettio"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/Ispirata/cfxxl"}
+    ]
   end
 end
