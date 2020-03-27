@@ -28,14 +28,14 @@ defmodule CFXXL.CAConfig do
   """
   defstruct [:pathlength, :pathlenzero, :expiry]
 
-  defimpl Poison.Encoder, for: CFXXL.CAConfig do
+  defimpl Jason.Encoder, for: CFXXL.CAConfig do
     def encode(ca_config, options) do
       # Encode only non-nil values
       ca_config
       |> Map.from_struct()
       |> Enum.filter(fn {_, v} -> v end)
       |> Enum.into(%{})
-      |> Poison.Encoder.encode(options)
+      |> Jason.Encoder.encode(options)
     end
   end
 end

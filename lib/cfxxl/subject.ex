@@ -27,7 +27,7 @@ defmodule CFXXL.Subject do
   """
   defstruct [:CN, :dname]
 
-  defimpl Poison.Encoder, for: CFXXL.Subject do
+  defimpl Jason.Encoder, for: CFXXL.Subject do
     def encode(subject, options) do
       # Encode only non-nil values and substitute dname
       # with names
@@ -37,7 +37,7 @@ defmodule CFXXL.Subject do
       |> Map.delete(:dname)
       |> Enum.filter(fn {_, v} -> v end)
       |> Enum.into(%{})
-      |> Poison.Encoder.encode(options)
+      |> Jason.Encoder.encode(options)
     end
   end
 end

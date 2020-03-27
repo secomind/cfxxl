@@ -48,7 +48,7 @@ defmodule CFXXL.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 0.13"},
-      {:poison, "~> 3.1"},
+      {:jason, "~> 1.2"},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false},
       {:excoveralls, "~> 0.7", only: :test}
     ]
