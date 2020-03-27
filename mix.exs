@@ -5,7 +5,7 @@ defmodule CFXXL.Mixfile do
     [
       app: :cfxxl,
       description: "CFSSL API client for Elixir",
-      version: "0.3.0",
+      version: "1.0.0",
       elixir: "~> 1.4",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
