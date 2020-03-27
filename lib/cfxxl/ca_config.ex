@@ -32,6 +32,12 @@ defmodule CFXXL.CAConfig do
   """
   defstruct [:pathlength, :pathlenzero, :expiry]
 
+  @type t() :: %__MODULE__{
+          pathlength: non_neg_integer(),
+          pathlenzero: boolean(),
+          expiry: String.t()
+        }
+
   defimpl Jason.Encoder, for: CFXXL.CAConfig do
     def encode(ca_config, options) do
       # Encode only non-nil values
