@@ -18,7 +18,7 @@ defmodule CFXXL.KeyConfig do
   pair
   """
 
-  @derive [Poison.Encoder]
+  @derive [Jason.Encoder]
 
   @doc """
   A struct containing an algorithm/size pair to configure key crypto.

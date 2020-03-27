@@ -320,7 +320,7 @@ defmodule CFXXL do
     * `{:error, reason}` if it fails
   """
   def post(%Client{endpoint: endpoint, options: options}, route, body) do
-    HTTPoison.post("#{endpoint}/#{route}", Poison.encode!(body), [], options)
+    HTTPoison.post("#{endpoint}/#{route}", Jason.encode!(body), [], options)
     |> process_response()
   end
 
@@ -425,7 +425,7 @@ defmodule CFXXL do
   defp extract_result(""), do: {:error, :empty_response}
 
   defp extract_result(body) do
-    case Poison.decode(body) do
+    case Jason.decode(body) do
       {:error, _} -> {:error, :invalid_response}
       {:ok, %{"success" => false} = decoded} -> {:error, extract_error_message(decoded)}
       {:ok, %{"success" => true, "result" => result}} -> {:ok, result}

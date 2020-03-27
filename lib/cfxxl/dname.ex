@@ -29,7 +29,7 @@ defmodule CFXXL.DName do
   """
   defstruct [:C, :L, :O, :OU, :ST]
 
-  defimpl Poison.Encoder, for: CFXXL.DName do
+  defimpl Jason.Encoder, for: CFXXL.DName do
     def encode(dname, options) do
       # Encode only non-nil values
       filtered_dname =
@@ -40,7 +40,7 @@ defmodule CFXXL.DName do
 
       # Wrap it in a list since the API wants it
       # this way
-      Poison.Encoder.encode([filtered_dname], options)
+      Jason.Encoder.encode([filtered_dname], options)
     end
   end
 end
