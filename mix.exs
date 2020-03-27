@@ -57,7 +57,7 @@ defmodule CFXXL.Mixfile do
   defp package do
     [
       maintainers: ["Riccardo Binetti", "Davide Bettio"],
-      licenses: ["MIT"],
+      licenses: ["Apache-2.0"],
       links: %{"GitHub" => "https://github.com/Ispirata/cfxxl"}
     ]
   end
