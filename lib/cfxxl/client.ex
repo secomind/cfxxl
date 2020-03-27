@@ -63,7 +63,8 @@ defmodule CFXXL.Client do
   ```
   """
   def new(base_url, options \\ []) do
-    endpoint = if String.ends_with?(base_url, "/") do
+    endpoint =
+      if String.ends_with?(base_url, "/") do
         "#{base_url}#{@api_prefix}"
       else
         "#{base_url}/#{@api_prefix}"
@@ -75,5 +76,4 @@ defmodule CFXXL.Client do
 
     %__MODULE__{endpoint: endpoint, options: filtered_opts}
   end
-
 end

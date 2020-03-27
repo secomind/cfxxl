@@ -120,6 +120,7 @@ defmodule CFXXL do
         {:error, :no_certificate_or_domain}
     end
   end
+
   def bundle(_client, _opts), do: {:error, :no_certificate_or_domain}
 
   @doc """
@@ -153,6 +154,7 @@ defmodule CFXXL do
         {:error, :no_certificate_or_domain}
     end
   end
+
   def certinfo(_client, _opts), do: {:error, :no_certificate_or_domain}
 
   @doc """
@@ -337,9 +339,7 @@ defmodule CFXXL do
     * `{:error, reason}` if it fails
   """
   def revoke(client, serial, aki, reason) do
-    body = %{serial: serial,
-             authority_key_id: normalize_aki(aki),
-             reason: reason}
+    body = %{serial: serial, authority_key_id: normalize_aki(aki), reason: reason}
 
     case post(client, "revoke", body) do
       {:ok, _} -> :ok
@@ -423,6 +423,7 @@ defmodule CFXXL do
   defp process_response({:ok, %HTTPoison.Response{body: body}}), do: extract_result(body)
 
   defp extract_result(""), do: {:error, :empty_response}
+
   defp extract_result(body) do
     case Poison.decode(body) do
       {:error, _} -> {:error, :invalid_response}

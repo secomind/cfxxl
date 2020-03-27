@@ -23,12 +23,41 @@ defmodule CFXXL.CertUtils do
 
   require Record
 
-  Record.defrecordp :certificate, :Certificate, Record.extract(:Certificate, from_lib: "public_key/include/public_key.hrl")
-  Record.defrecordp :tbs_certificate, :TBSCertificate, Record.extract(:TBSCertificate, from_lib: "public_key/include/public_key.hrl")
-  Record.defrecordp :extension, :Extension, Record.extract(:Extension, from_lib: "public_key/include/public_key.hrl")
-  Record.defrecordp :authority_key_identifier, :AuthorityKeyIdentifier, Record.extract(:AuthorityKeyIdentifier, from_lib: "public_key/include/public_key.hrl")
-  Record.defrecordp :attribute_type_and_value, :AttributeTypeAndValue, Record.extract(:AttributeTypeAndValue, from_lib: "public_key/include/public_key.hrl")
-  Record.defrecordp :validity, :Validity, Record.extract(:Validity, from_lib: "public_key/include/public_key.hrl")
+  Record.defrecordp(
+    :certificate,
+    :Certificate,
+    Record.extract(:Certificate, from_lib: "public_key/include/public_key.hrl")
+  )
+
+  Record.defrecordp(
+    :tbs_certificate,
+    :TBSCertificate,
+    Record.extract(:TBSCertificate, from_lib: "public_key/include/public_key.hrl")
+  )
+
+  Record.defrecordp(
+    :extension,
+    :Extension,
+    Record.extract(:Extension, from_lib: "public_key/include/public_key.hrl")
+  )
+
+  Record.defrecordp(
+    :authority_key_identifier,
+    :AuthorityKeyIdentifier,
+    Record.extract(:AuthorityKeyIdentifier, from_lib: "public_key/include/public_key.hrl")
+  )
+
+  Record.defrecordp(
+    :attribute_type_and_value,
+    :AttributeTypeAndValue,
+    Record.extract(:AttributeTypeAndValue, from_lib: "public_key/include/public_key.hrl")
+  )
+
+  Record.defrecordp(
+    :validity,
+    :Validity,
+    Record.extract(:Validity, from_lib: "public_key/include/public_key.hrl")
+  )
 
   @doc """
   Extracts the serial number of a certificate.
@@ -53,12 +82,13 @@ defmodule CFXXL.CertUtils do
   it doesn't find one or there's an error.
   """
   def authority_key_identifier!(cert) do
-    extensions = cert
+    extensions =
+      cert
       |> tbs()
       |> tbs_certificate(:extensions)
-      |> Enum.map(fn(x) -> extension(x) end)
+      |> Enum.map(fn x -> extension(x) end)
 
-    case Enum.find(extensions, fn(ext) -> ext[:extnID] == @aki_oid end) do
+    case Enum.find(extensions, fn ext -> ext[:extnID] == @aki_oid end) do
       nil ->
         raise "no AuthorityKeyIdentifier in certificate"
 
@@ -84,8 +114,8 @@ defmodule CFXXL.CertUtils do
 
     common_name =
       subject_attributes
-      |> Enum.map(fn([list_wrapped_attr]) -> attribute_type_and_value(list_wrapped_attr) end)
-      |> Enum.find(fn(attr) -> attr[:type] == @common_name_oid end)
+      |> Enum.map(fn [list_wrapped_attr] -> attribute_type_and_value(list_wrapped_attr) end)
+      |> Enum.find(fn attr -> attr[:type] == @common_name_oid end)
 
     if common_name do
       case :public_key.der_decode(:X520CommonName, common_name[:value]) do
@@ -142,7 +172,10 @@ defmodule CFXXL.CertUtils do
 
     cert_time_tuple_to_datetime({:generalTime, prefix ++ time_charlist})
   end
-  defp cert_time_tuple_to_datetime({_, [y0, y1, y2, y3, m0, m1, d0, d1, h0, h1, mn0, mn1, s0, s1, @z_char]}) do
+
+  defp cert_time_tuple_to_datetime(
+         {_, [y0, y1, y2, y3, m0, m1, d0, d1, h0, h1, mn0, mn1, s0, s1, @z_char]}
+       ) do
     year = parse_charlist_int([y0, y1, y2, y3])
     month = parse_charlist_int([m0, m1])
     day = parse_charlist_int([d0, d1])
