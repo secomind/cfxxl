@@ -24,7 +24,10 @@ defmodule CFXXL.Mixfile do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test
-      ]
+      ],
+
+      # Dyalizer cache
+      dialyzer_cache_directory: dialyzer_cache_directory(Mix.env())
     ]
   end
 
@@ -34,6 +37,14 @@ defmodule CFXXL.Mixfile do
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
     [extra_applications: [:logger]]
+  end
+
+  defp dialyzer_cache_directory(:ci) do
+    "dialyzer_cache"
+  end
+
+  defp dialyzer_cache_directory(_) do
+    nil
   end
 
   # Dependencies can be Hex packages:
@@ -50,7 +61,8 @@ defmodule CFXXL.Mixfile do
       {:httpoison, "~> 1.6"},
       {:jason, "~> 1.2"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.12", only: :test}
+      {:excoveralls, "~> 0.12", only: :test},
+      {:dialyzex, github: "Comcast/dialyzex", only: [:dev, :ci]}
     ]
   end
 

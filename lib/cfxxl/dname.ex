@@ -33,6 +33,14 @@ defmodule CFXXL.DName do
   """
   defstruct [:C, :L, :O, :OU, :ST]
 
+  @type t() :: %__MODULE__{
+          C: String.t(),
+          L: String.t(),
+          O: String.t(),
+          OU: String.t(),
+          ST: String.t()
+        }
+
   defimpl Jason.Encoder, for: CFXXL.DName do
     def encode(dname, options) do
       # Encode only non-nil values

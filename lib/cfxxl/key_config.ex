@@ -43,4 +43,9 @@ defmodule CFXXL.KeyConfig do
     * 521
   """
   defstruct algo: :ecdsa, size: 256
+
+  @type t() :: %__MODULE__{
+          algo: :ecdsa | :rsa,
+          size: pos_integer()
+        }
 end

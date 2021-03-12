@@ -36,6 +36,8 @@ defmodule CFXXL do
   @scan_opts [:ip, :timeout, :family, :scanner]
   @sign_opts [:hosts, :subject, :serial_sequence, :label, :profile, :bundle]
 
+  @spec authsign(CFXXL.Client.t(), String.t(), String.t(), keyword() | nil) ::
+          {:ok, any()} | {:error, any()}
   @doc """
   Request to sign a CSR with authentication.
 
@@ -65,6 +67,7 @@ defmodule CFXXL do
     post(client, "authsign", body)
   end
 
+  @spec bundle(CFXXL.Client.t(), keyword()) :: {:ok, any()} | {:error, any()}
   @doc """
   Request a certificate bundle
 
@@ -127,6 +130,7 @@ defmodule CFXXL do
 
   def bundle(_client, _opts), do: {:error, :no_certificate_or_domain}
 
+  @spec certinfo(CFXXL.Client.t(), keyword()) :: {:ok, any()} | {:error, any()}
   @doc """
   Request information about a certificate
 
@@ -161,6 +165,7 @@ defmodule CFXXL do
 
   def certinfo(_client, _opts), do: {:error, :no_certificate_or_domain}
 
+  @spec crl(CFXXL.Client.t(), String.t() | nil) :: {:ok, any()} | {:error, any()}
   @doc """
   Generate a CRL from the database
 
@@ -181,6 +186,7 @@ defmodule CFXXL do
     end
   end
 
+  @spec get(CFXXL.Client.t(), String.t(), map() | nil) :: {:ok, any()} | {:error, any()}
   @doc """
   Perform a generic GET to the CFSSL API.
 
@@ -199,6 +205,7 @@ defmodule CFXXL do
     |> process_response()
   end
 
+  @spec info(CFXXL.Client.t(), String.t(), keyword() | nil) :: {:ok, any()} | {:error, any()}
   @doc """
   Get signer information
 
@@ -225,6 +232,8 @@ defmodule CFXXL do
     post(client, "info", body)
   end
 
+  @spec init_ca(CFXXL.Client.t(), list(String.t()), CFXXL.DName.t(), keyword() | nil) ::
+          {:ok, any()} | {:error, any()}
   @doc """
   Request a new CA key/certificate pair.
 
@@ -253,6 +262,8 @@ defmodule CFXXL do
     post(client, "init_ca", body)
   end
 
+  @spec newcert(CFXXL.Client.t(), list(String.t()), CFXXL.DName.t(), keyword() | nil) ::
+          {:ok, any()} | {:error, any()}
   @doc """
   Request a new key/signed certificate pair.
 
@@ -285,6 +296,8 @@ defmodule CFXXL do
     post(client, "newcert", body)
   end
 
+  @spec newkey(CFXXL.Client.t(), list(String.t()), CFXXL.DName.t(), keyword() | nil) ::
+          {:ok, any()} | {:error, any()}
   @doc """
   Request a new key/CSR pair.
 
@@ -309,6 +322,7 @@ defmodule CFXXL do
     post(client, "newkey", body)
   end
 
+  @spec post(CFXXL.Client.t(), String.t(), map()) :: {:ok, any()} | {:error, any()}
   @doc """
   Perform a generic POST to the CFSSL API.
 
@@ -328,6 +342,7 @@ defmodule CFXXL do
     |> process_response()
   end
 
+  @spec revoke(CFXXL.Client.t(), String.t(), String.t(), String.t()) :: :ok | {:error, any()}
   @doc """
   Request to revoke a certificate.
 
@@ -351,6 +366,7 @@ defmodule CFXXL do
     end
   end
 
+  @spec scan(CFXXL.Client.t(), String.t(), keyword() | nil) :: {:ok, any()} | {:error, any()}
   @doc """
   Scan an host
 
@@ -378,6 +394,7 @@ defmodule CFXXL do
     get(client, "scan", params)
   end
 
+  @spec scaninfo(CFXXL.Client.t()) :: {:ok, any()} | {:error, any()}
   @doc """
   Get information on scan families
 
@@ -392,6 +409,7 @@ defmodule CFXXL do
     get(client, "scaninfo")
   end
 
+  @spec sign(CFXXL.Client.t(), String.t(), keyword() | nil) :: {:ok, any()} | {:error, any()}
   @doc """
   Request to sign a CSR.
 
@@ -426,6 +444,8 @@ defmodule CFXXL do
   defp process_response({:error, _} = response), do: response
   defp process_response({:ok, %HTTPoison.Response{body: body}}), do: extract_result(body)
 
+  @spec extract_result(iodata) ::
+          {:ok, any()} | {:error, any()}
   defp extract_result(""), do: {:error, :empty_response}
 
   defp extract_result(body) do
@@ -436,6 +456,7 @@ defmodule CFXXL do
     end
   end
 
+  @spec extract_error_message(%{required(String.t()) => list()}) :: any()
   defp extract_error_message(%{"errors" => errors}) do
     case errors do
       [%{"message" => msg} | _] -> msg
@@ -443,12 +464,14 @@ defmodule CFXXL do
     end
   end
 
+  @spec normalize_aki(String.t()) :: String.t()
   defp normalize_aki(aki) do
     aki
     |> String.downcase()
     |> String.replace(":", "")
   end
 
+  @spec filter_opts(list(), list()) :: list()
   defp filter_opts(opts, accepted_opts) do
     opts
     |> Enum.filter(fn {k, _} -> k in accepted_opts end)

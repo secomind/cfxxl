@@ -63,6 +63,7 @@ defmodule CFXXL.CertUtils do
     Record.extract(:Validity, from_lib: "public_key/include/public_key.hrl")
   )
 
+  @spec serial_number!(String.t()) :: String.t()
   @doc """
   Extracts the serial number of a certificate.
 
@@ -77,6 +78,7 @@ defmodule CFXXL.CertUtils do
     |> to_string()
   end
 
+  @spec authority_key_identifier!(String.t()) :: String.t()
   @doc """
   Extracts the authority key identifier of a certificate.
 
@@ -103,6 +105,7 @@ defmodule CFXXL.CertUtils do
     end
   end
 
+  @spec common_name!(String.t()) :: String.t() | nil
   @doc """
   Extracts the Common Name of a certificate.
 
@@ -134,6 +137,7 @@ defmodule CFXXL.CertUtils do
     end
   end
 
+  @spec not_after!(String.t()) :: DateTime.t()
   @doc """
   Extracts the not_after field (expiration) of a certificate.
 
@@ -149,6 +153,7 @@ defmodule CFXXL.CertUtils do
     |> cert_time_tuple_to_datetime()
   end
 
+  @spec not_before!(String.t()) :: DateTime.t()
   @doc """
   Extracts the not_before field of a certificate.
 
@@ -164,6 +169,8 @@ defmodule CFXXL.CertUtils do
     |> cert_time_tuple_to_datetime()
   end
 
+  @spec cert_time_tuple_to_datetime({:utcTime | :generalTime, nonempty_list(non_neg_integer())}) ::
+          DateTime.t()
   defp cert_time_tuple_to_datetime({:utcTime, [y0, y1 | _rest] = time_charlist}) do
     short_year = parse_charlist_int([y0, y1])
 
@@ -201,7 +208,8 @@ defmodule CFXXL.CertUtils do
     parsed
   end
 
-  defp tbs(cert) do
+  @spec tbs(binary) :: any
+  def tbs(cert) do
     cert
     |> :public_key.pem_decode()
     |> hd()
