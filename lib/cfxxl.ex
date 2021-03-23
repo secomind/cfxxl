@@ -456,7 +456,7 @@ defmodule CFXXL do
     end
   end
 
-  @spec extract_error_message(%{required(String.t()) => list()}) :: any()
+  @spec extract_error_message(%{required(String.t()) => list()}) :: String.t()
   defp extract_error_message(%{"errors" => errors}) do
     case errors do
       [%{"message" => msg} | _] -> msg
@@ -471,18 +471,20 @@ defmodule CFXXL do
     |> String.replace(":", "")
   end
 
-  @spec filter_opts(list(), list()) :: list()
+  @spec filter_opts(keyword(), list()) :: keyword()
   defp filter_opts(opts, accepted_opts) do
     opts
     |> Enum.filter(fn {k, _} -> k in accepted_opts end)
   end
 
+  @spec newkey_request(list(), DName.t(), keyword()) :: map()
   defp newkey_request(hosts, dname, opts) do
     opts
     |> filter_opts(@newkey_opts)
     |> Enum.into(%{hosts: hosts, names: dname})
   end
 
+  @spec sign_request(any(), keyword()) :: map()
   defp sign_request(csr, opts) do
     opts
     |> filter_opts(@sign_opts)

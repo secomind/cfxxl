@@ -169,7 +169,7 @@ defmodule CFXXL.CertUtils do
     |> cert_time_tuple_to_datetime()
   end
 
-  @spec cert_time_tuple_to_datetime({:utcTime | :generalTime, nonempty_list(non_neg_integer())}) ::
+  @spec cert_time_tuple_to_datetime({:utcTime | :generalTime, iolist()}) ::
           DateTime.t()
   defp cert_time_tuple_to_datetime({:utcTime, [y0, y1 | _rest] = time_charlist}) do
     short_year = parse_charlist_int([y0, y1])
@@ -199,6 +199,7 @@ defmodule CFXXL.CertUtils do
     DateTime.from_naive!(naive, "Etc/UTC")
   end
 
+  @spec parse_charlist_int(iolist()) :: integer()
   defp parse_charlist_int(charlist) do
     {parsed, ""} =
       charlist
@@ -209,7 +210,7 @@ defmodule CFXXL.CertUtils do
   end
 
   @spec tbs(binary) :: any
-  def tbs(cert) do
+  defp tbs(cert) do
     cert
     |> :public_key.pem_decode()
     |> hd()
