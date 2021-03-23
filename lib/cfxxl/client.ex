@@ -30,6 +30,12 @@ defmodule CFXXL.Client do
   """
   defstruct endpoint: "http://localhost:8888/#{@api_prefix}", options: []
 
+  @type t() :: %__MODULE__{
+          endpoint: String.t(),
+          options: HTTPoison.Request.options()
+        }
+
+  @spec new :: CFXXL.Client.t()
   @doc """
   Returns a default client
 
@@ -42,6 +48,7 @@ defmodule CFXXL.Client do
   """
   def new(), do: %__MODULE__{}
 
+  @spec new(String.t(), HTTPoison.Request.options() | nil) :: CFXXL.Client.t()
   @doc """
   Creates a client with the given parameters.
 
